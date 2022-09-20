@@ -35,6 +35,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // route model binding explicit 
+        // => this code i use to change the products route resource to routes model binding
+        Route::model('product', Product::class);
+
         $this->configureRateLimiting();
 
         $this->routes(function () {

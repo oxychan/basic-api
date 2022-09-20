@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) 
+    public function register(RegisterRequest $request) 
     {
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'password' => 'required|string|confirmed',
-            'email' => 'required|string|unique:users|email'
-        ]);
+        $fields = $request->validated();
 
         $user = User::create([
             'name' => $fields['name'],
@@ -29,22 +27,17 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 201);
+        return response()->json(['data' => $response], 201);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $fields = $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        $fields = $request->validated();
 
         $user = User::where('email', $fields['email'])->first();
 
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Bad Credentials'
-            ], 401);
+            return response()->json(['errors' => 'Bad Credentials'], 401);
         }
 
         $token = $user->createToken('logintoken')->plainTextToken;
@@ -54,15 +47,15 @@ class AuthController extends Controller
             'token' => $token
         ];
         
-        return response($response, 200);
+        return response()->json(['data' => $response], 200);
     }
 
     public function logout() 
     {
         auth()->user()->tokens()->delete();
 
-        return [
+        return response()->json([
             'message' => 'Logged Out'
-        ];
+        ], 200);
     }
 }

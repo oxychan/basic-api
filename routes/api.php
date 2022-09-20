@@ -18,13 +18,14 @@ use App\Http\Controllers\AuthController;
 */
 
 // Public Routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 // Routes for products 
 Route::get('/products/search/{name}', [ProductController::class, 'search'])->name('products.search');
 Route::resource('/products', ProductController::class)->only(['index', 'show']);
 
 // Routes for register and login
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+
 
 // Protected Routes
 // Group of routes that guarded by auth sanctum

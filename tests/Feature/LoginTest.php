@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
-    private const LOGIN_URI = 'api/login';
+    private const LOGIN_URL = 'api/login';
     /**
      * A basic feature test example.
      *
@@ -19,7 +19,7 @@ class LoginTest extends TestCase
     // email dan password tidak boleh kosong
     public function test_requires_email_and_password()
     {
-        $this->postJson(self::LOGIN_URI, [
+        $this->postJson(LoginTest::LOGIN_URL, [
             'email' => '',
             'password' => '',
         ])
@@ -33,7 +33,7 @@ class LoginTest extends TestCase
     // email harus sesuai dengan tipe email
     public function test_email_must_match_the_type()
     {
-        $this->postJson(self::LOGIN_URI, [
+        $this->postJson(LoginTest::LOGIN_URL, [
             'email' => 'wrongemailtype',
             'password' => bcrypt('password'),
         ])
@@ -53,7 +53,7 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(self::LOGIN_URI, $payload)
+        $this->postJson(LoginTest::LOGIN_URL, $payload)
             ->assertStatus(200);
     }
 }

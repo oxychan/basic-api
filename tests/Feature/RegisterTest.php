@@ -10,7 +10,7 @@ use App\Models\User;
 class RegisterTest extends TestCase
 {
     use RefreshDatabase;
-    private const REGISTER_URI = 'api/register';
+    private const REGISTER_URL = 'api/register';
     /**
      * A basic feature test example.
      *
@@ -24,7 +24,7 @@ class RegisterTest extends TestCase
             'password' => '',
         ];
 
-        $this->postJson(self::REGISTER_URI, $payload)
+        $this->postJson(RegisterTest::REGISTER_URL, $payload)
             ->assertStatus(422)
             ->assertJsonFragment([
                 'name' => ['The name field is required.'],
@@ -41,7 +41,7 @@ class RegisterTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson(self::REGISTER_URI, $payload)
+        $this->postJson(RegisterTest::REGISTER_URL, $payload)
             ->assertStatus(422)
             ->assertJsonFragment([
                 'name' => ['The name must be a string.'],
@@ -57,7 +57,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'wrongconfirmation',
         ];
 
-        $this->postJson(self::REGISTER_URI, $payload)
+        $this->postJson(RegisterTest::REGISTER_URL, $payload)
             ->assertStatus(422)
             ->assertJsonFragment([
                 'password' => ['The password confirmation does not match.'],
@@ -77,7 +77,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'password',
         ];
 
-        $this->postJson(self::REGISTER_URI, $payload)
+        $this->postJson(RegisterTest::REGISTER_URL, $payload)
             ->assertStatus(422)
             ->assertJsonFragment([
                 'email' => ['The email has already been taken.'],
@@ -94,7 +94,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => $user['password'],
         ];
 
-        $this->postJson(self::REGISTER_URI, $payload)
+        $this->postJson(RegisterTest::REGISTER_URL, $payload)
             ->assertStatus(201);
     }
 }

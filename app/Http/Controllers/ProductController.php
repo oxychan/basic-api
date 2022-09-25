@@ -27,9 +27,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $request->validated();
-
-        $response = Product::create($request->all());
+        $response = Product::create($request->validated());
         return response()->json(['data' => $response], 201);
     }
 
@@ -53,9 +51,8 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $validatedReq = $request->validated();
-        $product->update($validatedReq->all());
-
+        $product->update($request->validated());
+        
         return response()->json(['data' => $product], 200);
     }
 
@@ -68,7 +65,10 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return response()->json(null, 204);
+        $response = [
+            "status" => ["Data deleted successfully."],
+        ];
+        return response()->json($response, 204);
     }
 
         /**
